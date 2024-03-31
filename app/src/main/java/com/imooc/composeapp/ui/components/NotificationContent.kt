@@ -90,13 +90,15 @@ fun NotificationContent(vm: MainViewModel) {
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
-
+        // 今日任务提醒
         Text(
             text = "更多",
             color = Color(0xFF666666),
             fontSize = 14.sp,
             maxLines = 1
         )
+
+
     }
 }
 

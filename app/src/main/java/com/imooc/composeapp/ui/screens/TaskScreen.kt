@@ -49,6 +49,7 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
     // 当学年积分改变时重新计算百分比
     LaunchedEffect(taskVM.pointOfYear) {
         taskVM.updatePointPrecent()
+        taskVM.updateTips()
     }
 
     Column(
@@ -177,7 +178,17 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             )
                         }
                     }
-
+                    Text(
+                        text = taskVM.tips,
+                        color = Color(0xFF149EE7),
+                        fontSize = 14.sp,
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .background(Color(0x33149EE7))
+                            .padding(8.dp)
+                            .fillMaxWidth()
+                    )
 
                 }
             }

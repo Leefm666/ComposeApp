@@ -34,4 +34,30 @@ class TaskViewModel() : ViewModel() {
 
 
     val weeks = listOf("02.05", "02.06", "02.07", "02.08", "02.09", "02.10", "今日")
+
+    // 今日积分
+    var todayPoint = 0
+
+    // 今日提醒文字
+     var tips by mutableStateOf("今日获得0积分，快去完成下面的任务吧")
+        private set
+    /**
+     * 更新任务提醒文字
+     */
+    fun updateTips() {
+        when (todayPoint) {
+            0 -> {
+                tips = "今日获得0积分，快去完成下面的任务吧"
+            }
+
+            in 1..14 -> {
+                tips = "今日获得${todayPoint}积分，快去完成下面的任务吧"
+            }
+
+            else -> {
+                "今日获取${todayPoint}积分,已完成任务"
+            }
+        }
+
+    }
 }
