@@ -33,6 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.insets.statusBarsPadding
 import com.imooc.composeapp.ui.components.ChartView
 import com.imooc.composeapp.ui.components.CircleRing
+import com.imooc.composeapp.ui.components.DailyTaskContent
 import com.imooc.composeapp.ui.components.appBarHeight
 import com.imooc.composeapp.viewmodel.TaskViewModel
 
@@ -178,6 +179,7 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             )
                         }
                     }
+                    // 今日任务提醒
                     Text(
                         text = taskVM.tips,
                         color = Color(0xFF149EE7),
@@ -189,6 +191,9 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                             .padding(8.dp)
                             .fillMaxWidth()
                     )
+
+                    // 每日任务
+                    DailyTaskContent()
 
                 }
             }
