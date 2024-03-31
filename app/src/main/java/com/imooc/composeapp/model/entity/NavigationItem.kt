@@ -1,6 +1,5 @@
 package com.imooc.composeapp.model.entity
 
-import androidx.compose.material.icons.Icons
 import androidx.compose.ui.graphics.vector.ImageVector
 
 /**

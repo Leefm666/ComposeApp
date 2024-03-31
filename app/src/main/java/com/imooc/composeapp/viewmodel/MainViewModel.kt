@@ -1,6 +1,5 @@
 package com.imooc.composeapp.viewmodel
 
-import android.graphics.drawable.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Description
 import androidx.compose.material.icons.filled.SmartDisplay
