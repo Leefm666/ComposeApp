@@ -44,7 +44,7 @@ fun MainFrame(
     }
 
 
-    ProvideWindowInsets() {
+
         Scaffold(bottomBar = {
             BottomNavigation(
                 backgroundColor = MaterialTheme.colors.surface,
@@ -77,7 +77,7 @@ fun MainFrame(
             }
 
         }
-    }
+
 }
 
 
