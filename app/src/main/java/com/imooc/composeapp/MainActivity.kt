@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
-import com.imooc.composeapp.ui.screens.MainFrame
+import com.imooc.composeapp.ui.components.NavHostApp
 import com.imooc.composeapp.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MainFrame()
+                    NavHostApp()
                 }
             }
         }

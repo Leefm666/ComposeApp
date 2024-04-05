@@ -18,10 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imooc.composeapp.model.entity.ArticleEntity
 
+/**
+ *  文章列表item
+ */
 @Composable
-fun ArticleItem(article: ArticleEntity) {
+fun ArticleItem(article: ArticleEntity, modifier: Modifier = Modifier) {
 
-    Column(modifier = Modifier.padding(8.dp)) {
+    Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = article.title,
             color = Color(0xFF333333),

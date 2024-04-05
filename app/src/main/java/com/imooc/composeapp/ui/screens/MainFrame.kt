@@ -28,7 +28,9 @@ import com.imooc.composeapp.model.entity.NavigationItem
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainFrame() {
+fun MainFrame(
+    onNavigateToArticle: () -> Unit = {}
+) {
     // 获取底部高度
 
     val navigationItems = listOf(
@@ -43,8 +45,6 @@ fun MainFrame() {
 
 
     ProvideWindowInsets() {
-
-
         Scaffold(bottomBar = {
             BottomNavigation(
                 backgroundColor = MaterialTheme.colors.surface,
@@ -69,7 +69,8 @@ fun MainFrame() {
         }) {
             Box(modifier = Modifier.padding(it)) {
                 when (currentNavigationIndex) {
-                    0 -> StudyScreen()
+                    0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
+
                     1 -> TaskScreen()
                     2 -> MineScreen()
                 }

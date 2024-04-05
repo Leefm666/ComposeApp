@@ -64,6 +64,9 @@ dependencies {
     // 约束布局
     implementation "androidx.constraintlayout:constraintlayout-compose:1.0.0"
 
+    // 导航动画
+    implementation "com.google.accompanist:accompanist-navigation-animation:$accompanist_version"
+
     // 图标
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation 'androidx.core:core-ktx:1.6.0'

@@ -1,6 +1,7 @@
 package com.imooc.composeapp.ui.screens
 
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +44,8 @@ import com.imooc.composeapp.viewmodel.VideoViewModel
 fun StudyScreen(
     vm: MainViewModel = viewModel(),
     articleViewModel: ArticleViewModel = viewModel(),
-    videoViewModel: VideoViewModel = viewModel()
+    videoViewModel: VideoViewModel = viewModel(),
+    onNavigateToArticle: () -> Unit = {}
 ) {
     Column() {
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
@@ -149,7 +151,9 @@ fun StudyScreen(
             if (vm.showArticleList) {
                 // 文章列表
                 items(articleViewModel.list) { article ->
-                    ArticleItem(article)
+                    ArticleItem(
+                        article,
+                        modifier = Modifier.clickable { onNavigateToArticle.invoke() })
                 }
             } else {
                 // 视频列表
