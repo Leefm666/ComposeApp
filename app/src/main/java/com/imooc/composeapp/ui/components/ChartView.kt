@@ -12,7 +12,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ChartView( points: List<Double>,modifier: Modifier = Modifier) {
+fun ChartView(points: List<Double>, modifier: Modifier = Modifier) {
 
     // 每一行的高度
     val heightForRow = 24

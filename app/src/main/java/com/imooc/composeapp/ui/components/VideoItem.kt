@@ -81,7 +81,7 @@ fun VideoItem(videoEntity: VideoEntity) {
 
         Text(
             text = videoEntity.type,
-            fontSize = 10   .sp,
+            fontSize = 10.sp,
             color = Color(0xFF999999),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis, modifier = Modifier.layoutId("type")

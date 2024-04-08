@@ -39,8 +39,9 @@ class TaskViewModel() : ViewModel() {
     var todayPoint = 0
 
     // 今日提醒文字
-     var tips by mutableStateOf("今日获得0积分，快去完成下面的任务吧")
+    var tips by mutableStateOf("今日获得0积分，快去完成下面的任务吧")
         private set
+
     /**
      * 更新任务提醒文字
      */
