@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import com.imooc.composeapp.model.entity.VideoEntity
 
 @Composable
-fun VideoItem(videoEntity: VideoEntity) {
+fun VideoItem(modifier: Modifier = Modifier, videoEntity: VideoEntity) {
 
     val constraintSet = ConstraintSet {
         val title = createRefFor("title")
@@ -57,7 +57,7 @@ fun VideoItem(videoEntity: VideoEntity) {
     }
 
     ConstraintLayout(
-        constraintSet, modifier = Modifier
+        constraintSet, modifier = modifier
             .padding(8.dp)
             .fillMaxWidth()
     ) {

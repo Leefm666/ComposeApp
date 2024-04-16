@@ -29,7 +29,8 @@ import com.imooc.composeapp.model.entity.NavigationItem
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainFrame(
-    onNavigateToArticle: () -> Unit = {}
+    onNavigateToArticle: () -> Unit = {},
+    onNavigateToVideo: () -> Unit = {}
 ) {
     // 获取底部高度
 
@@ -69,7 +70,10 @@ fun MainFrame(
     }) {
         Box(modifier = Modifier.padding(it)) {
             when (currentNavigationIndex) {
-                0 -> StudyScreen(onNavigateToArticle = onNavigateToArticle)
+                0 -> StudyScreen(
+                    onNavigateToArticle = onNavigateToArticle,
+                    onNavigateToVideo = onNavigateToVideo
+                )
 
                 1 -> TaskScreen()
                 2 -> MineScreen()

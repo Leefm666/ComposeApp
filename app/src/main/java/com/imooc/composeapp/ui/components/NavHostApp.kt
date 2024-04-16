@@ -13,6 +13,7 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.imooc.composeapp.ui.navigation.Destinations
 import com.imooc.composeapp.ui.screens.ArticleDetailScreen
 import com.imooc.composeapp.ui.screens.MainFrame
+import com.imooc.composeapp.ui.screens.VideoDetailScreen
 
 /**
  *  导航控制器
@@ -41,6 +42,8 @@ fun NavHostApp() {
                 MainFrame(onNavigateToArticle = {
                     Log.i("+++++++++==", "NavHostApp: ")
                     navController.navigate(Destinations.ArticleDetail.route)
+                }, onNavigateToVideo = {
+                    navController.navigate(Destinations.VideoDetail.route)
                 })
             }
             // 文章详情页
@@ -50,6 +53,17 @@ fun NavHostApp() {
                 slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
             }) {
                 ArticleDetailScreen(
+                    onBack = { navController.popBackStack() }
+                )
+            }
+
+            // 视频详情页
+            composable(Destinations.VideoDetail.route, enterTransition = {
+                slideIntoContainer(AnimatedContentScope.SlideDirection.Left)
+            }, exitTransition = {
+                slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
+            }) {
+                VideoDetailScreen(
                     onBack = { navController.popBackStack() }
                 )
             }
