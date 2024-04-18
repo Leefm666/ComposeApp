@@ -3,7 +3,6 @@ package com.imooc.composeapp.ui.components.video
 import android.content.Context
 import android.os.Bundle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.SaverScope
 import androidx.compose.runtime.saveable.rememberSaveable
