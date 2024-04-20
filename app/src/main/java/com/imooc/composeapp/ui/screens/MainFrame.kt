@@ -29,7 +29,8 @@ import com.imooc.composeapp.model.entity.NavigationItem
 @Composable
 fun MainFrame(
     onNavigateToArticle: () -> Unit = {},
-    onNavigateToVideo: () -> Unit = {}
+    onNavigateToVideo: () -> Unit = {},
+    onNavigateToStudyHistory: () -> Unit = {}
 ) {
     // 获取底部高度
 
@@ -71,7 +72,8 @@ fun MainFrame(
             when (currentNavigationIndex) {
                 0 -> StudyScreen(
                     onNavigateToArticle = onNavigateToArticle,
-                    onNavigateToVideo = onNavigateToVideo
+                    onNavigateToVideo = onNavigateToVideo,
+                    onNavigateToStudyHistory = onNavigateToStudyHistory
                 )
 
                 1 -> TaskScreen()

@@ -82,6 +82,9 @@ dependencies {
     // 腾讯视频播放器
     implementation 'com.tencent.liteav:LiteAVSDK_Player:latest.release'
 
+    // datastore
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+
     // 图标
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
     implementation 'androidx.core:core-ktx:1.6.0'

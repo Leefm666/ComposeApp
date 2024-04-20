@@ -10,4 +10,8 @@ sealed class Destinations(val route: String) {
 
     // 视频详情页
     object VideoDetail : Destinations("VideoDetail")
+
+    // 登陆页
+    object Login : Destinations("Login")
+
 }

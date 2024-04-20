@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,8 +34,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -43,9 +42,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imooc.composeapp.R
+import com.imooc.composeapp.compositionLocal.LocalUserViewModel
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(onClose: () -> Unit) {
+
+
+    val userViewModel = LocalUserViewModel.current
 
     // 屏幕的宽度
     var screenWidth: Float
@@ -65,12 +68,12 @@ fun LoginScreen() {
         mutableStateOf(false)
     }
 
-    with(LocalDensity.current) {
-        screenWidth = LocalConfiguration.current.screenWidthDp.dp.toPx()
-        screenHeight = LocalConfiguration.current.screenHeightDp.dp.toPx()
-    }
+    /* with(LocalDensity.current) {
+         screenWidth = LocalConfiguration.current.screenWidthDp.dp.toPx()
+         screenHeight = LocalConfiguration.current.screenHeightDp.dp.toPx()
+     }*/
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
         Image(
             painter = painterResource(id = R.drawable.bg),
             contentDescription = null,
@@ -84,8 +87,8 @@ fun LoginScreen() {
                 .background(
                     Brush.linearGradient(
                         listOf(Color(0xffbb8378), Color.Transparent),
-                        start = Offset(x = screenWidth, y = 0f),
-                        end = Offset(x = 0f, y = screenHeight)
+                        start = Offset(x = constraints.maxWidth.toFloat(), y = 0f),
+                        end = Offset(x = 0f, y = constraints.maxHeight.toFloat())
                     )
                 )
         )
@@ -96,8 +99,8 @@ fun LoginScreen() {
                 .background(
                     Brush.linearGradient(
                         listOf(Color(0xFF149EE7), Color.Transparent),
-                        start = Offset(x = 0f, y = screenHeight),
-                        end = Offset(x = screenWidth, y = 0f)
+                        start = Offset(x = 0f, y = constraints.maxHeight.toFloat()),
+                        end = Offset(x = constraints.maxWidth.toFloat(), y = 0f)
                     )
                 )
         )
@@ -181,7 +184,10 @@ fun LoginScreen() {
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
-                TextButton(onClick = {}) {
+                TextButton(onClick = {
+                    userViewModel.login(onClose = onClose)
+
+                }) {
                     Text(text = "登陆", color = Color.White)
                 }
             }
@@ -197,6 +203,8 @@ fun LoginScreen() {
 @Preview
 @Composable
 fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen {
+
+    }
 }
 
