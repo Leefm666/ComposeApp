@@ -1,4 +1,4 @@
-package com.imooc.composeapp.model
+package com.imooc.composeapp.model.service
 
 import android.content.Context
 import androidx.datastore.core.DataStore

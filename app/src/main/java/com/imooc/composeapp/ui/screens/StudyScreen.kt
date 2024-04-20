@@ -21,6 +21,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -49,6 +50,11 @@ fun StudyScreen(
     onNavigateToVideo: () -> Unit = {},
     onNavigateToStudyHistory: () -> Unit = {}
 ) {
+
+    LaunchedEffect(Unit) {
+        vm.categoryData()
+    }
+
     Column() {
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
             // 搜索按钮

@@ -3,7 +3,7 @@ package com.imooc.composeapp.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imooc.composeapp.model.UserInfoManager
+import com.imooc.composeapp.model.service.UserInfoManager
 import com.imooc.composeapp.model.entity.UserInfoEntity
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch

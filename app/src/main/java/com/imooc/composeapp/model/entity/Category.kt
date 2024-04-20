@@ -8,5 +8,18 @@ package com.imooc.composeapp.model.entity
  * @param [title]
  */
 data class Category(
-    val title: String
+    val title: String,
+
+    val id: String
 )
+
+/**
+ * 分类
+ * @author 10130
+ * @date 2024/04/20
+ * @constructor 创建[CategoryResponse]
+ * @param [data]
+ */
+data class CategoryResponse(var data: List<Category>) : BaseReponse() {
+
+}
