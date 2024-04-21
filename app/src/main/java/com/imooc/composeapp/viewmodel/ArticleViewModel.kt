@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.imooc.composeapp.model.entity.ArticleEntity
 import com.imooc.composeapp.model.service.ArticleService
+import kotlinx.coroutines.delay
 
 class ArticleViewModel : ViewModel() {
 
@@ -14,7 +15,11 @@ class ArticleViewModel : ViewModel() {
 
     val pageSize = 10
 
-    private val pageOffset = 1
+    private var pageOffset = 1
+
+    // 是否正在刷新
+    var refreshing by mutableStateOf(false)
+        private set
 
     // 新闻列表数据
     var list by mutableStateOf(
@@ -98,7 +103,15 @@ class ArticleViewModel : ViewModel() {
         if (res.code == 0 && res.data != null) {
             list = res.data
             listLoader = true
+            refreshing = false
         }
+    }
+
+    suspend fun refresh() {
+        pageOffset = 1
+//        listLoader = false
+        refreshing = true
+        fetchArticleList()
     }
 
 

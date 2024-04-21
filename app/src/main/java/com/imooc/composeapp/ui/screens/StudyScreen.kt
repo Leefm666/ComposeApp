@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -40,6 +41,9 @@ import com.imooc.composeapp.viewmodel.ArticleViewModel
 import com.imooc.composeapp.viewmodel.MainViewModel
 import com.imooc.composeapp.viewmodel.VideoViewModel
 import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -51,6 +55,8 @@ fun StudyScreen(
     onNavigateToVideo: () -> Unit = {},
     onNavigateToStudyHistory: () -> Unit = {}
 ) {
+
+    val coroutinScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         // 获取分类数据
@@ -158,33 +164,42 @@ fun StudyScreen(
             }
         }
 
-        LazyColumn() {
-            item {
-                // 轮播图
-                SwiperContent(vm = vm)
-            }
-            item {
-                // 通知公告
-                NotificationContent(vm)
-            }
-
-            if (vm.showArticleList) {
-                // 文章列表
-                items(articleViewModel.list) { article ->
-                    ArticleItem(
-                        article,
-                        articleViewModel.listLoader,
-                        modifier = Modifier.clickable { onNavigateToArticle.invoke() })
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+            onRefresh = {
+                coroutinScope.launch {
+                    articleViewModel.refresh()
                 }
-            } else {
-                // 视频列表
-                items(videoViewModel.list) { videoEntity ->
-                    VideoItem(modifier = Modifier.clickable {
-                        onNavigateToVideo()
-                    }, videoEntity)
+            }) {
+            LazyColumn() {
+                item {
+                    // 轮播图
+                    SwiperContent(vm = vm)
                 }
-            }
+                item {
+                    // 通知公告
+                    NotificationContent(vm)
+                }
 
+                if (vm.showArticleList) {
+                    // 文章列表
+                    items(articleViewModel.list) { article ->
+                        ArticleItem(
+                            article,
+                            articleViewModel.listLoader,
+                            modifier = Modifier.clickable { onNavigateToArticle.invoke() })
+                    }
+                } else {
+                    // 视频列表
+                    items(videoViewModel.list) { videoEntity ->
+                        VideoItem(modifier = Modifier.clickable {
+                            onNavigateToVideo()
+                        }, videoEntity)
+                    }
+                }
+
+
+            }
 
         }
 
