@@ -1,6 +1,7 @@
 package com.imooc.composeapp.ui.screens
 
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.LeadingIconTab
@@ -43,6 +45,7 @@ import com.imooc.composeapp.viewmodel.VideoViewModel
 import com.google.accompanist.placeholder.placeholder
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.imooc.composeapp.extension.OnBottomReached
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -57,6 +60,14 @@ fun StudyScreen(
 ) {
 
     val coroutinScope = rememberCoroutineScope()
+
+
+    val lazyListState = rememberLazyListState()
+
+
+    lazyListState.OnBottomReached {
+        Log.i("====", "StudyScreen: OnBottomReached")
+    }
 
     LaunchedEffect(Unit) {
         // 获取分类数据
@@ -171,7 +182,7 @@ fun StudyScreen(
                     articleViewModel.refresh()
                 }
             }) {
-            LazyColumn() {
+            LazyColumn(state = lazyListState) {
                 item {
                     // 轮播图
                     SwiperContent(vm = vm)
