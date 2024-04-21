@@ -10,6 +10,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,10 @@ import coil.compose.AsyncImage
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.shimmer
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.placeholder.shimmer
 import com.imooc.composeapp.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 import java.util.Timer
@@ -39,13 +44,19 @@ fun SwiperContent(vm: MainViewModel) {
     val coroutineScope = rememberCoroutineScope()
     DisposableEffect(Unit) {
         val timer = Timer()
+        coroutineScope.launch {
+            vm.swiperData()
+        }
         timer.schedule(object : TimerTask() {
             override fun run() {
-                //需要执行的任务
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                if(vm.swiperLoaded){
+                    //需要执行的任务
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
 
+                    }
                 }
+
             }
         }, 3000, 3000)
 
@@ -60,6 +71,7 @@ fun SwiperContent(vm: MainViewModel) {
         modifier = Modifier
             .padding(horizontal = 8.dp)
             .clip(RoundedCornerShape(8.dp))
+    , userScrollEnabled = vm.swiperLoaded
     ) { index ->
         val actulIndex =
             (index - initialIndex).floorMod(actualCount) //index - (index.floorDiv(actualCount)) * actualCount
@@ -68,7 +80,8 @@ fun SwiperContent(vm: MainViewModel) {
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(7 / 3f),
+                .aspectRatio(7 / 3f)
+            ,
             contentScale = ContentScale.Crop
         )
     }
