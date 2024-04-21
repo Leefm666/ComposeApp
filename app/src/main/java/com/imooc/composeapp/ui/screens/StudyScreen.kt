@@ -53,7 +53,10 @@ fun StudyScreen(
 ) {
 
     LaunchedEffect(Unit) {
+        // 获取分类数据
         vm.categoryData()
+        // 获取文章列表
+        articleViewModel.fetchArticleList()
     }
 
     Column() {
@@ -170,6 +173,7 @@ fun StudyScreen(
                 items(articleViewModel.list) { article ->
                     ArticleItem(
                         article,
+                        articleViewModel.listLoader,
                         modifier = Modifier.clickable { onNavigateToArticle.invoke() })
                 }
             } else {
