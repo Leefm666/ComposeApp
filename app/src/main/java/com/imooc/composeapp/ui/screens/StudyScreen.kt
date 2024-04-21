@@ -39,6 +39,7 @@ import com.imooc.composeapp.ui.components.VideoItem
 import com.imooc.composeapp.viewmodel.ArticleViewModel
 import com.imooc.composeapp.viewmodel.MainViewModel
 import com.imooc.composeapp.viewmodel.VideoViewModel
+import com.google.accompanist.placeholder.placeholder
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -102,7 +103,7 @@ fun StudyScreen(
         TabRow(
             selectedTabIndex = vm.categoryIndex,
             backgroundColor = Color(0x66149EE7),
-            contentColor = Color(0xFF149EE7)
+            contentColor = Color(0xFF149EE7),
         ) {
             vm.categories.forEachIndexed { index, category ->
                 Tab(
@@ -115,7 +116,9 @@ fun StudyScreen(
                 ) {
                     Text(
                         text = category.title,
-                        modifier = Modifier.padding(vertical = 8.dp),
+                        modifier = Modifier
+                            .padding(vertical = 8.dp)
+                            .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
                         fontSize = 14.sp
                     )
                 }

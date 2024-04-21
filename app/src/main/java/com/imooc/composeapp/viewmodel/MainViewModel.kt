@@ -14,7 +14,11 @@ import com.imooc.composeapp.model.service.HomeService
 
 class MainViewModel : ViewModel() {
 
-    val homeService = HomeService.instance()
+    private val homeService = HomeService.instance()
+
+    // 分类数据是否加载成功
+    var categoryLoaded by mutableStateOf(false)
+        private set
 
     // 分类数据
     var categories by mutableStateOf(
@@ -31,6 +35,7 @@ class MainViewModel : ViewModel() {
         val categoryResponse = homeService.category()
         if (categoryResponse.code == 0) {
             categories = categoryResponse.data
+            categoryLoaded = true
         } else {
             // 不成功的情况下 读取message
             val message = categoryResponse.message
