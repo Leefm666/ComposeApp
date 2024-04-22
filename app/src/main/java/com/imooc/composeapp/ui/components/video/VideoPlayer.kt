@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components.video
 
-
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -59,7 +58,6 @@ import java.util.TimerTask
 
 @Composable
 fun VideoPlayer(vodController: VodController) {
-
     var timeFormatText by remember {
         mutableStateOf("")
     }
@@ -75,15 +73,15 @@ fun VideoPlayer(vodController: VodController) {
     val lifecycleOwer = LocalLifecycleOwner.current
     // 监听生命周期
     DisposableEffect(vodController) {
-        val lifecycleEventObsever = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> vodController.resume()
-                Lifecycle.Event.ON_PAUSE -> vodController.pause()
-                else -> {
-
+        val lifecycleEventObsever =
+            LifecycleEventObserver { _, event ->
+                when (event) {
+                    Lifecycle.Event.ON_RESUME -> vodController.resume()
+                    Lifecycle.Event.ON_PAUSE -> vodController.pause()
+                    else -> {
+                    }
                 }
             }
-        }
         lifecycleOwer.lifecycle.addObserver(lifecycleEventObsever)
         onDispose {
             lifecycleOwer.lifecycle.removeObserver(lifecycleEventObsever)
@@ -116,101 +114,108 @@ fun VideoPlayer(vodController: VodController) {
             )
     }
 
-
     // 是否显示控制层
     var showControllerBar by remember {
         mutableStateOf(false)
     }
 
-
     // 定时器
     var timer: Timer? = null
 
-    Box(Modifier.clickable(
-        interactionSource = remember {
-            MutableInteractionSource()
-        }, indication = null
+    Box(
+        Modifier.clickable(
+            interactionSource =
+                remember {
+                    MutableInteractionSource()
+                },
+            indication = null,
+        ) {
+            timer?.cancel()
+            timer = null
+            if (!showControllerBar) {
+                timer = Timer()
+                timer?.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            showControllerBar = false
+                        }
+                    },
+                    3000,
+                )
+            }
+            showControllerBar = !showControllerBar
+        },
     ) {
-        timer?.cancel()
-        timer = null
-        if (!showControllerBar) {
-            timer = Timer()
-            timer?.schedule(object : TimerTask() {
-                override fun run() {
-                    showControllerBar = false
-                }
-
-            }, 3000)
-        }
-        showControllerBar = !showControllerBar
-    }) {
         // 视频播放区域
         VideoView(vodPlayer = vodController.vodPlayer)
 
         // 视频封面
         if (vodController.playValue.state == PlayState.None) {
-            Box() {
+            Box {
                 AsyncImage(
                     model = vodController.playValue.coverUrl,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .aspectRatio(16 / 9f)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .aspectRatio(16 / 9f),
                 )
 
                 IconButton(
                     onClick = {
                         vodController.startPlay()
                     },
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(60.dp)
+                    modifier =
+                        Modifier
+                            .align(Alignment.Center)
+                            .size(60.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Default.PlayCircle,
                         contentDescription = null,
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .size(60.dp)
+                        modifier =
+                            Modifier
+                                .align(Alignment.Center)
+                                .size(60.dp),
                     )
                 }
             }
         }
 
-
         // 正在加载层
         if (vodController.playValue.state == PlayState.Loading) {
             CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(60.dp)
+                modifier =
+                    Modifier
+                        .align(Alignment.Center)
+                        .size(60.dp),
             )
         }
 
         // 视频控制层
-        if (showControllerBar)
+        if (showControllerBar) {
             Column(
                 modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                verticalArrangement = Arrangement.SpaceBetween,
             ) {
-
                 if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     Spacer(modifier = Modifier.height(1.dp))
                 } else {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .height(45.dp)
-                            .fillMaxWidth()
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(
-                                        Color.Black,
-                                        Color.Transparent
-                                    )
-                                )
-                            )
+                        modifier =
+                            Modifier
+                                .height(45.dp)
+                                .fillMaxWidth()
+                                .background(
+                                    Brush.verticalGradient(
+                                        listOf(
+                                            Color.Black,
+                                            Color.Transparent,
+                                        ),
+                                    ),
+                                ),
                     ) {
                         IconButton(onClick = {
                             context.findActivity()?.requestedOrientation =
@@ -219,7 +224,7 @@ fun VideoPlayer(vodController: VodController) {
                             Icon(
                                 imageVector = Icons.Default.ArrowBack,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
                             )
                         }
 
@@ -227,18 +232,19 @@ fun VideoPlayer(vodController: VodController) {
                     }
                 }
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(45.dp)
-                        .background(
-                            Brush.verticalGradient(
-                                listOf(
-                                    Color.Transparent,
-                                    Color.Black
-                                )
-                            )
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(45.dp)
+                            .background(
+                                Brush.verticalGradient(
+                                    listOf(
+                                        Color.Transparent,
+                                        Color.Black,
+                                    ),
+                                ),
+                            ),
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     // 播放或暂停按钮
                     IconButton(onClick = {
@@ -252,17 +258,15 @@ fun VideoPlayer(vodController: VodController) {
                             Icon(
                                 imageVector = Icons.Default.Pause,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
                             )
-
                         } else {
                             Icon(
                                 imageVector = Icons.Default.PlayArrow,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
                             )
                         }
-
                     }
                     Spacer(modifier = Modifier.width(8.dp))
                     // 进度条
@@ -273,7 +277,7 @@ fun VideoPlayer(vodController: VodController) {
                             vodController.seekTo(it.toLong())
                         },
                         valueRange = 0f..vodController.playValue.duration.toFloat(),
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
                     )
                     Spacer(modifier = Modifier.width(8.dp))
 
@@ -293,7 +297,6 @@ fun VideoPlayer(vodController: VodController) {
                         } else {
                             context.findActivity()?.requestedOrientation =
                                 ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-
                         }
                     }) {
                         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -301,27 +304,27 @@ fun VideoPlayer(vodController: VodController) {
                             Icon(
                                 imageVector = Icons.Default.Fullscreen,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
                             )
                         } else {
                             Icon(
                                 imageVector = Icons.Default.FullscreenExit,
                                 contentDescription = null,
-                                tint = Color.White
+                                tint = Color.White,
                             )
                         }
-
                     }
 
                     Spacer(modifier = Modifier.width(8.dp))
-
                 }
             }
+        }
     }
 }
 
-fun Context.findActivity(): Activity? = when (this) {
-    is Activity -> this
-    is ContextWrapper -> baseContext.findActivity()
-    else -> null
-}
+fun Context.findActivity(): Activity? =
+    when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
+    }

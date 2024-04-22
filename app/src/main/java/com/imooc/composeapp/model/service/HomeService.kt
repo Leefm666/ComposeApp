@@ -6,14 +6,11 @@ import com.imooc.composeapp.model.entity.SwiperReponse
 import retrofit2.http.GET
 
 interface HomeService {
-
     @GET("category/list")
     suspend fun category(): CategoryResponse
 
-
     @GET("recommand/banner")
     suspend fun banner(): SwiperReponse
-
 
     companion object {
         fun instance(): HomeService {

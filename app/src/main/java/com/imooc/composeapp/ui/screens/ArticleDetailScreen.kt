@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -44,9 +43,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ArticleDetailScreen(
     articleViewModel: ArticleViewModel = viewModel(),
-    onBack: () -> Unit
+    onBack: () -> Unit,
 ) {
-
     val webViewState =
         rememberWebViewState(data = articleViewModel.content)
 
@@ -56,10 +54,7 @@ fun ArticleDetailScreen(
 
     val scaffoldState = rememberBottomSheetScaffoldState()
 
-
     val coroutineScope = rememberCoroutineScope()
-
-
 
     BottomSheetScaffold(
         scaffoldState = scaffoldState,
@@ -70,39 +65,47 @@ fun ArticleDetailScreen(
                         text = "文章详情",
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center,
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
                     )
                 },
                 navigationIcon = {
-                    Icon(imageVector = Icons.Default.NavigateBefore, contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                onBack()
-                            }
-                            .padding(8.dp)
+                    Icon(
+                        imageVector = Icons.Default.NavigateBefore,
+                        contentDescription = null,
+                        modifier =
+                            Modifier
+                                .clickable {
+                                    onBack()
+                                }
+                                .padding(8.dp),
                     )
                 },
                 actions = {
-                    Icon(imageVector = Icons.Default.TextFields, contentDescription = null,
-                        modifier = Modifier
-                            .clickable {
-                                // todo 点击设置文字大小
-                                coroutineScope.launch {
-                                    if (scaffoldState.bottomSheetState.isCollapsed) {
-                                        scaffoldState.bottomSheetState.expand()
-                                    } else {
-                                        scaffoldState.bottomSheetState.collapse()
+                    Icon(
+                        imageVector = Icons.Default.TextFields,
+                        contentDescription = null,
+                        modifier =
+                            Modifier
+                                .clickable {
+                                    // todo 点击设置文字大小
+                                    coroutineScope.launch {
+                                        if (scaffoldState.bottomSheetState.isCollapsed) {
+                                            scaffoldState.bottomSheetState.expand()
+                                        } else {
+                                            scaffoldState.bottomSheetState.collapse()
+                                        }
                                     }
-
                                 }
-                            }
-                            .padding(8.dp))
-                }
+                                .padding(8.dp),
+                    )
+                },
             )
         },
-        modifier = Modifier
-            .background(MaterialTheme.colors.primary)
-            .statusBarsPadding(), sheetContent = {
+        modifier =
+            Modifier
+                .background(MaterialTheme.colors.primary)
+                .statusBarsPadding(),
+        sheetContent = {
             Column(modifier = Modifier.padding(8.dp)) {
                 Text(text = "字体大小", fontSize = 16.sp)
                 Slider(value = fontScale, onValueChange = {
@@ -111,7 +114,7 @@ fun ArticleDetailScreen(
                 }, steps = 3, valueRange = 0.75f..1.75f)
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "较小", fontSize = 14.sp, color = Color(0xFF999999)) // 0.75
                     Text(text = "标准", fontSize = 14.sp, color = Color(0xFF999999)) // 1.0
@@ -122,13 +125,8 @@ fun ArticleDetailScreen(
                 Spacer(modifier = Modifier.height(8.dp))
             }
         },
-        sheetPeekHeight = 0.dp
+        sheetPeekHeight = 0.dp,
     ) {
         com.imooc.module.webview.WebView(webViewState)
     }
-
 }
-
-
-
-

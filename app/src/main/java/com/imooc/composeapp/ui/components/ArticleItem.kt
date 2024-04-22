@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components
 
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,8 +24,11 @@ import com.imooc.composeapp.model.entity.ArticleEntity
  *  文章列表item
  */
 @Composable
-fun ArticleItem(article: ArticleEntity, loaded: Boolean, modifier: Modifier = Modifier) {
-
+fun ArticleItem(
+    article: ArticleEntity,
+    loaded: Boolean,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = article.title,
@@ -34,9 +36,10 @@ fun ArticleItem(article: ArticleEntity, loaded: Boolean, modifier: Modifier = Mo
             fontSize = 16.sp,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .padding(bottom = 8.dp)
-                .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer())
+            modifier =
+                Modifier
+                    .padding(bottom = 8.dp)
+                    .placeholder(visible = !loaded, highlight = PlaceholderHighlight.shimmer()),
         )
 
         Row(horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()) {
@@ -46,10 +49,11 @@ fun ArticleItem(article: ArticleEntity, loaded: Boolean, modifier: Modifier = Mo
                 fontSize = 10.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.placeholder(
-                    visible = !loaded,
-                    highlight = PlaceholderHighlight.shimmer()
-                )
+                modifier =
+                    Modifier.placeholder(
+                        visible = !loaded,
+                        highlight = PlaceholderHighlight.shimmer(),
+                    ),
             )
             Text(
                 text = article.timestamp,
@@ -57,16 +61,14 @@ fun ArticleItem(article: ArticleEntity, loaded: Boolean, modifier: Modifier = Mo
                 fontSize = 10.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.placeholder(
-                    visible = !loaded,
-                    highlight = PlaceholderHighlight.shimmer()
-                )
+                modifier =
+                    Modifier.placeholder(
+                        visible = !loaded,
+                        highlight = PlaceholderHighlight.shimmer(),
+                    ),
             )
         }
         Spacer(Modifier.height(8.dp))
         Divider()
     }
 }
-
-
-

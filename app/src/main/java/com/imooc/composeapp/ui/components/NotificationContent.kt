@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -48,15 +47,18 @@ fun NotificationContent(vm: MainViewModel) {
 
     DisposableEffect(Unit) {
         val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-                //需要执行的任务
-                coroutineScope.launch {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
-
+        timer.schedule(
+            object : TimerTask() {
+                override fun run() {
+                    // 需要执行的任务
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
                 }
-            }
-        }, 3000, 3000)
+            },
+            3000,
+            3000,
+        )
 
         onDispose {
             timer.cancel()
@@ -64,14 +66,14 @@ fun NotificationContent(vm: MainViewModel) {
     }
 
     Row(
-        modifier = Modifier
-            .padding(8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color(0x22149EE7))
-            .height(45.dp),
-
+        modifier =
+            Modifier
+                .padding(8.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color(0x22149EE7))
+                .height(45.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(text = "最新活动", color = Color(0xFF149EE7), fontSize = 14.sp)
         Spacer(modifier = Modifier.width(8.dp))
@@ -79,14 +81,17 @@ fun NotificationContent(vm: MainViewModel) {
             state = pagerState,
             count = virtualCount,
             modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) { index ->
             val actualIndex =
                 (index - initialIndex).floorMod(actualCount)
             Text(
-                text = vm.notifications[actualIndex], color = Color(0xFF333333),
-                fontSize = 14.sp, maxLines = 1, overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.fillMaxWidth()
+                text = vm.notifications[actualIndex],
+                color = Color(0xFF333333),
+                fontSize = 14.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -95,17 +100,13 @@ fun NotificationContent(vm: MainViewModel) {
             text = "更多",
             color = Color(0xFF666666),
             fontSize = 14.sp,
-            maxLines = 1
+            maxLines = 1,
         )
-
-
     }
 }
-
 
 @Preview
 @Composable
 fun NotificationContentPreview(vm: MainViewModel = viewModel()) {
     NotificationContent(vm)
 }
-

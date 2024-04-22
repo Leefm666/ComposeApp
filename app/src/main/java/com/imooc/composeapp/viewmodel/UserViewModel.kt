@@ -3,14 +3,12 @@ package com.imooc.composeapp.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.imooc.composeapp.model.service.UserInfoManager
 import com.imooc.composeapp.model.entity.UserInfoEntity
+import com.imooc.composeapp.model.service.UserInfoManager
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 
 class UserViewModel(context: Context) : ViewModel() {
-
-
     private val userInfoManager = UserInfoManager(context)
 
     var userInfo: UserInfoEntity? = null
@@ -18,16 +16,16 @@ class UserViewModel(context: Context) : ViewModel() {
 
     // DataStore // SharedPreference
 
-
     init {
         // 其实这里可以使用DataStore的对象存储，直接存储整个对象
         viewModelScope.launch {
             val userName = userInfoManager.userName.firstOrNull()
-            userInfo = if (userName?.isNotEmpty() == true) {
-                UserInfoEntity(userName)
-            } else {
-                null
-            }
+            userInfo =
+                if (userName?.isNotEmpty() == true) {
+                    UserInfoEntity(userName)
+                } else {
+                    null
+                }
         }
     }
 
@@ -55,5 +53,4 @@ class UserViewModel(context: Context) : ViewModel() {
             userInfo = null // 置空内存数据
         }
     }
-
 }

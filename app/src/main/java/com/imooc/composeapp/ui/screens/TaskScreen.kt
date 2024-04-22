@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +43,6 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
 
     with(LocalConfiguration.current) {
         boxWidthDp = screenWidthDp / 2
-
     }
 
     // 当学年积分改变时重新计算百分比
@@ -54,24 +52,27 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
     }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(Color(0xFF149EE7), Color.White)))
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Brush.verticalGradient(listOf(Color(0xFF149EE7), Color.White))),
     ) {
         // 标题栏
         Row(
-            modifier = Modifier
-                .statusBarsPadding()
-                .height(appBarHeight),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .statusBarsPadding()
+                    .height(appBarHeight),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = "学习任务",
                 fontSize = 18.sp,
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
                 textAlign = TextAlign.Center,
-                color = Color.White
+                color = Color.White,
             )
         }
         // 学习周期
@@ -82,9 +83,10 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                     fontSize = 12.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
                 )
             }
 
@@ -92,9 +94,10 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
             item {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .height(boxWidthDp.dp)
-                        .padding(top = 8.dp)
+                    modifier =
+                        Modifier
+                            .height(boxWidthDp.dp)
+                            .padding(top = 8.dp),
                 ) {
                     // 圆环
                     CircleRing(boxWidthDp, taskVM)
@@ -108,7 +111,7 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                                 }
                             },
                             fontSize = 36.sp,
-                            color = Color.White
+                            color = Color.White,
                         )
                         Text(text = "学年积分", fontSize = 12.sp, color = Color.White)
                     }
@@ -118,32 +121,33 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
             item {
                 Row(
                     horizontalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = (-40).dp)
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .offset(y = (-40).dp),
                 ) {
-                    Column() {
+                    Column {
                         Text(
                             text = "${taskVM.totalPointOfYear}分",
                             fontSize = 16.sp,
-                            color = Color.White
+                            color = Color.White,
                         )
                         Text(
                             text = "学年规定积分",
                             fontSize = 12.sp,
-                            color = Color.White
+                            color = Color.White,
                         )
                     }
-                    Column() {
+                    Column {
                         Text(
                             text = "${taskVM.totalPointOfYear - taskVM.pointOfYear}分",
                             fontSize = 16.sp,
-                            color = Color.White
+                            color = Color.White,
                         )
                         Text(
                             text = "还差",
                             fontSize = 12.sp,
-                            color = Color.White
+                            color = Color.White,
                         )
                     }
                 }
@@ -151,31 +155,32 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
 
             item {
                 Column(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
-                        .background(Color.White)
-                        .fillMaxSize()
-                        .padding(top = 8.dp)
-                        .padding(horizontal = 8.dp, vertical = 8.dp)
+                    modifier =
+                        Modifier
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
+                            .background(Color.White)
+                            .fillMaxSize()
+                            .padding(top = 8.dp)
+                            .padding(horizontal = 8.dp, vertical = 8.dp),
                 ) {
                     Text(text = "学习明细", fontSize = 16.sp, color = Color(0xFF333333))
                     Text(
                         text = "最近一周获得积分情况",
                         fontSize = 14.sp,
-                        color = Color(0xFF999999)
+                        color = Color(0xFF999999),
                     )
                     // 积分情况的折线图
                     ChartView(taskVM.pointOfWeek, modifier = Modifier.padding(vertical = 8.dp))
 
                     // 日期
-                    Row() {
+                    Row {
                         taskVM.weeks.forEach {
                             Text(
                                 text = it,
                                 fontSize = 12.sp,
                                 color = Color(0xFF999999),
                                 modifier = Modifier.weight(1f),
-                                textAlign = TextAlign.Center
+                                textAlign = TextAlign.Center,
                             )
                         }
                     }
@@ -184,20 +189,19 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
                         text = taskVM.tips,
                         color = Color(0xFF149EE7),
                         fontSize = 14.sp,
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .background(Color(0x33149EE7))
-                            .padding(8.dp)
-                            .fillMaxWidth()
+                        modifier =
+                            Modifier
+                                .padding(vertical = 8.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .background(Color(0x33149EE7))
+                                .padding(8.dp)
+                                .fillMaxWidth(),
                     )
 
                     // 每日任务
                     DailyTaskContent()
-
                 }
             }
-
         }
     }
 }
@@ -207,4 +211,3 @@ fun TaskScreen(taskVM: TaskViewModel = viewModel()) {
 fun TaskScreenPreview() {
     TaskScreen()
 }
-

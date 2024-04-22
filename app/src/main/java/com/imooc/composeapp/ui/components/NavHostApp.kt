@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components
 
-
 import android.util.Log
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -20,7 +19,6 @@ import com.imooc.composeapp.ui.screens.MainFrame
 import com.imooc.composeapp.ui.screens.VideoDetailScreen
 import com.imooc.composeapp.viewmodel.UserViewModel
 
-
 /**
  *  导航控制器
  */
@@ -29,23 +27,21 @@ import com.imooc.composeapp.viewmodel.UserViewModel
 fun NavHostApp() {
     val navController = rememberAnimatedNavController()
     ProvideWindowInsets {
-
         CompositionLocalProvider(LocalUserViewModel provides UserViewModel(LocalContext.current)) {
-
             val userViewModel = LocalUserViewModel.current
 
             AnimatedNavHost(
                 navController = navController,
-                startDestination = Destinations.HomeFrame.route
+                startDestination = Destinations.HomeFrame.route,
             ) {
                 // 首页大框架
                 composable(Destinations.HomeFrame.route, enterTransition = {
                     slideIntoContainer(
-                        AnimatedContentScope.SlideDirection.Right
+                        AnimatedContentScope.SlideDirection.Right,
                     )
                 }, exitTransition = {
                     slideOutOfContainer(
-                        AnimatedContentScope.SlideDirection.Left
+                        AnimatedContentScope.SlideDirection.Left,
                     )
                 }) {
                     MainFrame(onNavigateToArticle = {
@@ -56,12 +52,10 @@ fun NavHostApp() {
                     }, onNavigateToStudyHistory = {
                         if (userViewModel.logged) {
                             // 已登录
-
                         } else {
                             // 未登录
                             navController.navigate(Destinations.Login.route)
                         }
-
                     })
                 }
                 // 文章详情页
@@ -71,7 +65,7 @@ fun NavHostApp() {
                     slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
                 }) {
                     ArticleDetailScreen(
-                        onBack = { navController.popBackStack() }
+                        onBack = { navController.popBackStack() },
                     )
                 }
 
@@ -82,7 +76,7 @@ fun NavHostApp() {
                     slideOutOfContainer(AnimatedContentScope.SlideDirection.Right)
                 }) {
                     VideoDetailScreen(
-                        onBack = { navController.popBackStack() }
+                        onBack = { navController.popBackStack() },
                     )
                 }
                 // 登陆页
@@ -105,4 +99,3 @@ fun NavHostApp() {
 fun NavHostAppPreview() {
     NavHostApp()
 }
-

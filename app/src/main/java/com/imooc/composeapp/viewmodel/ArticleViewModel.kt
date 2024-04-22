@@ -6,12 +6,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.imooc.composeapp.model.entity.ArticleEntity
 import com.imooc.composeapp.model.service.ArticleService
-import kotlinx.coroutines.delay
 
 class ArticleViewModel : ViewModel() {
-
     private val articleService = ArticleService.instance()
-
 
     val pageSize = 10
 
@@ -27,70 +24,84 @@ class ArticleViewModel : ViewModel() {
             ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
+                timestamp = "2020-02-10",
             ),
             ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            ), ArticleEntity(
+                timestamp = "2020-02-10",
+            ),
+            ArticleEntity(
                 title = "什么是Side Effect?",
                 source = "网站",
-                timestamp = "2020-02-10"
-            )
-        )
+                timestamp = "2020-02-10",
+            ),
+        ),
     )
         private set
 
@@ -98,12 +109,27 @@ class ArticleViewModel : ViewModel() {
     var listLoader by mutableStateOf(false)
         private set
 
+    // 是否还有更多
+    private var hasMore = false
+
     suspend fun fetchArticleList() {
         val res = articleService.list(pageOffset = pageOffset, pageSize = pageSize)
         if (res.code == 0 && res.data != null) {
-            list = res.data
+            val tmpList = mutableListOf<ArticleEntity>()
+            if (pageOffset != 1) {
+                tmpList.addAll(list)
+            }
+            tmpList.addAll(res.data)
+            // 是否还有更多数据
+            hasMore = res.data.size == pageSize
+            list = tmpList
             listLoader = true
             refreshing = false
+        } else {
+            pageOffset--
+            if (pageOffset <= 1) {
+                pageOffset = 1
+            }
         }
     }
 
@@ -114,9 +140,16 @@ class ArticleViewModel : ViewModel() {
         fetchArticleList()
     }
 
+    suspend fun loadMore() {
+        if (hasMore) {
+            pageOffset++
+            fetchArticleList()
+        }
+    }
 
     // html头部
-    private val htmlHeader = """
+    private val htmlHeader =
+        """
         <!DOCTYPE html>
         <html lang="en">
         <head>
@@ -125,18 +158,19 @@ class ArticleViewModel : ViewModel() {
             <title>Document</title>
         </head>
         <body>
-    """.trimIndent()
+        """.trimIndent()
 
     // html尾部
-    private val htmlFooter = """
+    private val htmlFooter =
+        """
         </body>
         </html>
-    """.trimIndent()
+        """.trimIndent()
 
-
-    var content = """${htmlHeader}
+    var content =
+        """
+        $htmlHeader
         <div><h1>Header</h1></div>
-        ${htmlFooter}
-    """.trimIndent()
-
+        $htmlFooter
+        """.trimIndent()
 }

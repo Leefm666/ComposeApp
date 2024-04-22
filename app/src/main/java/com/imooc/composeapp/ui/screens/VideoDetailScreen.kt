@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -40,9 +39,10 @@ import com.imooc.module.webview.rememberWebViewState
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -> Unit) {
-
-
+fun VideoDetailScreen(
+    videoViewModel: VideoViewModel = viewModel(),
+    onBack: () -> Unit,
+) {
     val systemUiController = rememberSystemUiController()
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
@@ -50,37 +50,37 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
     val vodController =
         rememberVodController(
             videoUrl = videoViewModel.videoUrl,
-            coverUrl = videoViewModel.coverUrl
+            coverUrl = videoViewModel.coverUrl,
         )
-
 
     val configuration = LocalConfiguration.current
 
     var scaffoldModifier by remember {
         mutableStateOf(
-            Modifier.alpha(1f)
+            Modifier.alpha(1f),
         )
     }
 
     var videoBoxModifier by remember {
         mutableStateOf(
-            Modifier.aspectRatio(16 / 9f)
+            Modifier.aspectRatio(16 / 9f),
         )
     }
-
 
     // todo 横屏后，点击屏幕状态栏即显示出来，而且不会再隐藏，如何处理这个问题
     LaunchedEffect(configuration.orientation) {
         // 横屏后恢复播放
         vodController.restore()
         if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoBoxModifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(16 / 9f)
+            videoBoxModifier =
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16 / 9f)
             systemUiController.isSystemBarsVisible = true
-            scaffoldModifier = Modifier
-                .background(Blue700)
-                .statusBarsPadding()
+            scaffoldModifier =
+                Modifier
+                    .background(Blue700)
+                    .statusBarsPadding()
         } else {
             videoBoxModifier = Modifier.fillMaxSize()
             systemUiController.isSystemBarsVisible = false
@@ -91,25 +91,25 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
     Scaffold(
         topBar = {
             if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-
                 TopAppBar(title = {
                     Text(
                         text = "视频详情",
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
                     )
                 }, navigationIcon = {
                     Icon(
                         imageVector = Icons.Default.NavigateBefore,
                         contentDescription = null,
-                        modifier = Modifier
-                            .clickable { onBack() }
-                            .padding(8.dp)
+                        modifier =
+                            Modifier
+                                .clickable { onBack() }
+                                .padding(8.dp),
                     )
                 })
             } else {
-
             }
-        }, modifier = scaffoldModifier
+        },
+        modifier = scaffoldModifier,
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             // 视频区域
@@ -120,10 +120,8 @@ fun VideoDetailScreen(videoViewModel: VideoViewModel = viewModel(), onBack: () -
             // 想让标题一起滚动，有两个方案
             // 方案一：把标题 html文本中去
             // 方案二：计算视频简介在webView中的高度，然后动态设置webView的高度
-            //简介
+            // 简介
             WebView(state = webViewState)
         }
     }
 }
-
-

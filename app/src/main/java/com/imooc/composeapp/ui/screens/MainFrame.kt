@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -30,26 +29,25 @@ import com.imooc.composeapp.model.entity.NavigationItem
 fun MainFrame(
     onNavigateToArticle: () -> Unit = {},
     onNavigateToVideo: () -> Unit = {},
-    onNavigateToStudyHistory: () -> Unit = {}
+    onNavigateToStudyHistory: () -> Unit = {},
 ) {
     // 获取底部高度
 
-    val navigationItems = listOf(
-        NavigationItem("学习", Icons.Filled.Home),
-        NavigationItem("任务", Icons.Filled.DateRange),
-        NavigationItem("我的", Icons.Filled.Person)
-    )
+    val navigationItems =
+        listOf(
+            NavigationItem("学习", Icons.Filled.Home),
+            NavigationItem("任务", Icons.Filled.DateRange),
+            NavigationItem("我的", Icons.Filled.Person),
+        )
 
     var currentNavigationIndex by remember {
         mutableStateOf(0)
     }
 
-
-
     Scaffold(bottomBar = {
         BottomNavigation(
             backgroundColor = MaterialTheme.colors.surface,
-            modifier = Modifier.navigationBarsPadding()
+            modifier = Modifier.navigationBarsPadding(),
         ) {
             navigationItems.forEachIndexed { index, navigationItem ->
                 BottomNavigationItem(
@@ -62,33 +60,31 @@ fun MainFrame(
                     },
                     label = {
                         Text(text = navigationItem.title)
-                    }, selectedContentColor = Color(0xFF149EE7),
-                    unselectedContentColor = Color(0xFF999999)
+                    },
+                    selectedContentColor = Color(0xFF149EE7),
+                    unselectedContentColor = Color(0xFF999999),
                 )
             }
         }
     }) {
         Box(modifier = Modifier.padding(it)) {
             when (currentNavigationIndex) {
-                0 -> StudyScreen(
-                    onNavigateToArticle = onNavigateToArticle,
-                    onNavigateToVideo = onNavigateToVideo,
-                    onNavigateToStudyHistory = onNavigateToStudyHistory
-                )
+                0 ->
+                    StudyScreen(
+                        onNavigateToArticle = onNavigateToArticle,
+                        onNavigateToVideo = onNavigateToVideo,
+                        onNavigateToStudyHistory = onNavigateToStudyHistory,
+                    )
 
                 1 -> TaskScreen()
                 2 -> MineScreen()
             }
         }
-
     }
-
 }
-
 
 @Preview
 @Composable
 fun MainFramePreview() {
     MainFrame()
 }
-

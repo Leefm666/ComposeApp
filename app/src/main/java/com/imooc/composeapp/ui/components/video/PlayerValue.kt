@@ -15,15 +15,12 @@ import kotlinx.parcelize.Parcelize
  */
 @Parcelize
 class PlayerValue : Parcelable {
-
-
     var coverUrl: String = ""
 
     var title: String = ""
 
     // 存储url 目的是为了横竖屏切换等重绘的场景
     var videoUrl: String = ""
-
 
     // 视频总时长
     var duration by mutableStateOf(0L)
@@ -35,7 +32,6 @@ class PlayerValue : Parcelable {
     var state by mutableStateOf(PlayState.None)
 }
 
-
 /**
  * 播放状态
  *
@@ -44,6 +40,5 @@ enum class PlayState {
     None, // 未播放
     Loading, // 加载中
     Playing, // 播放中
-    Pause // 已暂停
-
+    Pause, // 已暂停
 }

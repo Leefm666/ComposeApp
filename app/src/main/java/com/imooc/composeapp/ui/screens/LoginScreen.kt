@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -46,8 +45,6 @@ import com.imooc.composeapp.compositionLocal.LocalUserViewModel
 
 @Composable
 fun LoginScreen(onClose: () -> Unit) {
-
-
     val userViewModel = LocalUserViewModel.current
 
     // 屏幕的宽度
@@ -63,7 +60,6 @@ fun LoginScreen(onClose: () -> Unit) {
         mutableStateOf("")
     }
 
-
     var showPassword by remember {
         mutableStateOf(false)
     }
@@ -78,115 +74,128 @@ fun LoginScreen(onClose: () -> Unit) {
             painter = painterResource(id = R.drawable.bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
         // 右上往左下渐变
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.linearGradient(
-                        listOf(Color(0xffbb8378), Color.Transparent),
-                        start = Offset(x = constraints.maxWidth.toFloat(), y = 0f),
-                        end = Offset(x = 0f, y = constraints.maxHeight.toFloat())
-                    )
-                )
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.linearGradient(
+                            listOf(Color(0xffbb8378), Color.Transparent),
+                            start = Offset(x = constraints.maxWidth.toFloat(), y = 0f),
+                            end = Offset(x = 0f, y = constraints.maxHeight.toFloat()),
+                        ),
+                    ),
         )
         // 左下往右下渐变层
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    Brush.linearGradient(
-                        listOf(Color(0xFF149EE7), Color.Transparent),
-                        start = Offset(x = 0f, y = constraints.maxHeight.toFloat()),
-                        end = Offset(x = constraints.maxWidth.toFloat(), y = 0f)
-                    )
-                )
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(
+                        Brush.linearGradient(
+                            listOf(Color(0xFF149EE7), Color.Transparent),
+                            start = Offset(x = 0f, y = constraints.maxHeight.toFloat()),
+                            end = Offset(x = constraints.maxWidth.toFloat(), y = 0f),
+                        ),
+                    ),
         )
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
-
-            ) {
-            Column() {
+        ) {
+            Column {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = "用户登录",
                     color = Color.White,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-
-                    )
+                )
             }
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally
+                modifier =
+                    Modifier
+                        .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(
-                    value = userName, onValueChange = { userName = it }, singleLine = true,
+                    value = userName,
+                    onValueChange = { userName = it },
+                    singleLine = true,
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.White,
                         )
                     },
                     label = {
                         Text(text = "用户名", fontSize = 14.sp, color = Color.White)
                     },
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.LightGray,
-                        unfocusedIndicatorColor = Color.LightGray,
-                        focusedLabelColor = Color.LightGray,
-                        unfocusedLabelColor = Color.LightGray,
-                        cursorColor = Color.White
-                    )
+                    colors =
+                        TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = Color.LightGray,
+                            focusedLabelColor = Color.LightGray,
+                            unfocusedLabelColor = Color.LightGray,
+                            cursorColor = Color.White,
+                        ),
                 )
 
                 TextField(
-                    value = passWord, onValueChange = { passWord = it }, singleLine = true,
+                    value = passWord,
+                    onValueChange = { passWord = it },
+                    singleLine = true,
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.Password,
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.White,
                         )
                     },
                     trailingIcon = {
                         Icon(
-                            imageVector = if (showPassword) Icons.Default.Visibility else
-                                Icons.Default.VisibilityOff,
+                            imageVector =
+                                if (showPassword) {
+                                    Icons.Default.Visibility
+                                } else {
+                                    Icons.Default.VisibilityOff
+                                },
                             contentDescription = null,
-                            modifier = Modifier.clickable {
-                                showPassword = !showPassword
-                            }, tint = Color.White
+                            modifier =
+                                Modifier.clickable {
+                                    showPassword = !showPassword
+                                },
+                            tint = Color.White,
                         )
                     },
                     label = {
                         Text(text = "密码", fontSize = 14.sp, color = Color.White)
                     },
                     visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
-                    colors = TextFieldDefaults.textFieldColors(
-                        backgroundColor = Color.Transparent,
-                        focusedIndicatorColor = Color.LightGray,
-                        unfocusedIndicatorColor = Color.LightGray,
-                        focusedLabelColor = Color.LightGray,
-                        unfocusedLabelColor = Color.LightGray,
-                        cursorColor = Color.White
-                    )
+                    colors =
+                        TextFieldDefaults.textFieldColors(
+                            backgroundColor = Color.Transparent,
+                            focusedIndicatorColor = Color.LightGray,
+                            unfocusedIndicatorColor = Color.LightGray,
+                            focusedLabelColor = Color.LightGray,
+                            unfocusedLabelColor = Color.LightGray,
+                            cursorColor = Color.White,
+                        ),
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
                 TextButton(onClick = {
                     userViewModel.login(onClose = onClose)
-
                 }) {
                     Text(text = "登陆", color = Color.White)
                 }
@@ -196,7 +205,6 @@ fun LoginScreen(onClose: () -> Unit) {
                 Text(text = "还没有账号？点击立即注册", color = Color.LightGray, fontSize = 14.sp)
             }
         }
-
     }
 }
 
@@ -204,7 +212,5 @@ fun LoginScreen(onClose: () -> Unit) {
 @Composable
 fun LoginScreenPreview() {
     LoginScreen {
-
     }
 }
-

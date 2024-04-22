@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -22,7 +21,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.imooc.composeapp.ui.theme.Blue200
 import com.imooc.composeapp.ui.theme.Blue700
 
-
 val appBarHeight = 56.dp
 
 /**
@@ -31,33 +29,38 @@ val appBarHeight = 56.dp
  * @param [content] 每个标题栏的内容
  */
 @Composable
-fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
+fun TopAppBar(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit,
+) {
     val systemUiController = rememberSystemUiController()
     LaunchedEffect(key1 = Unit) {
         systemUiController.setStatusBarColor(Color.Transparent)
     }
 
     // 转换状态栏的高度为dp
-    val statusBarHeightDp = with(LocalDensity.current) {
-        LocalWindowInsets.current.statusBars.top.toDp()
-    }
+    val statusBarHeightDp =
+        with(LocalDensity.current) {
+            LocalWindowInsets.current.statusBars.top.toDp()
+        }
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(
-                Brush.linearGradient(
-                    listOf(
-                        Blue700,
-                        Blue200
-                    )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .background(
+                    Brush.linearGradient(
+                        listOf(
+                            Blue700,
+                            Blue200,
+                        ),
+                    ),
                 )
-            )
-            .height(appBarHeight + statusBarHeightDp)
-            .padding(top = statusBarHeightDp)
-            .then(modifier),
+                .height(appBarHeight + statusBarHeightDp)
+                .padding(top = statusBarHeightDp)
+                .then(modifier),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         content()
     }
@@ -66,8 +69,7 @@ fun TopAppBar(modifier: Modifier = Modifier, content: @Composable () -> Unit) {
 @Preview
 @Composable
 fun TopAppBarPreview() {
-    TopAppBar() {
+    TopAppBar {
         Text("标题")
     }
 }
-

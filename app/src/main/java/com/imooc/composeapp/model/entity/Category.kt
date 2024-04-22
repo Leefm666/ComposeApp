@@ -9,8 +9,7 @@ package com.imooc.composeapp.model.entity
  */
 data class Category(
     val title: String,
-
-    val id: String
+    val id: String,
 )
 
 /**
@@ -20,6 +19,4 @@ data class Category(
  * @constructor 创建[CategoryResponse]
  * @param [data]
  */
-data class CategoryResponse(var data: List<Category>) : BaseReponse() {
-
-}
+data class CategoryResponse(var data: List<Category>) : BaseReponse()

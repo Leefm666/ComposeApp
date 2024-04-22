@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.components
 
-
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -37,40 +36,54 @@ fun DailyTaskContent() {
         "试听学习",
         "10积分/每有效观看视频或收听音频累计1分钟",
         "以获得50积分/每日上限100积分",
-        0.5f
+        0.5f,
     )
 }
 
 @Composable
-fun DailyTaskItem(title: String, secondaryText: String, desc: String, percent: Float) {
+fun DailyTaskItem(
+    title: String,
+    secondaryText: String,
+    desc: String,
+    percent: Float,
+) {
     val inlineContentId = "inlineContentId"
 
-    val sencondaryAnnotatedText = buildAnnotatedString {
-        append(secondaryText)
-        appendInlineContent(inlineContentId, "[icon]")
-    }
+    val sencondaryAnnotatedText =
+        buildAnnotatedString {
+            append(secondaryText)
+            appendInlineContent(inlineContentId, "[icon]")
+        }
 
-    val inlineContent = mapOf(
-        Pair(inlineContentId, InlineTextContent(
-            Placeholder(
-                width = 14.sp, height = 14.sp,
-                PlaceholderVerticalAlign.AboveBaseline
-            )
-        ) {
-            Icon(
-                imageVector = Icons.Default.HelpOutline,
-                contentDescription = null,
-                modifier = Modifier.clickable {
-                    Log.i("===", "点击了问好")
-                })
-        })
-    )
+    val inlineContent =
+        mapOf(
+            Pair(
+                inlineContentId,
+                InlineTextContent(
+                    Placeholder(
+                        width = 14.sp,
+                        height = 14.sp,
+                        PlaceholderVerticalAlign.AboveBaseline,
+                    ),
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.HelpOutline,
+                        contentDescription = null,
+                        modifier =
+                            Modifier.clickable {
+                                Log.i("===", "点击了问好")
+                            },
+                    )
+                },
+            ),
+        )
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(modifier = Modifier.weight(7.5f)) {
             Text(text = title, fontSize = 16.sp, color = Color(0xFF333333))
@@ -78,7 +91,7 @@ fun DailyTaskItem(title: String, secondaryText: String, desc: String, percent: F
                 text = sencondaryAnnotatedText,
                 inlineContent = inlineContent,
                 fontSize = 14.sp,
-                color = Color(0xFF333333)
+                color = Color(0xFF333333),
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 LinearProgressIndicator(progress = percent, modifier = Modifier.weight(3f))
@@ -86,28 +99,33 @@ fun DailyTaskItem(title: String, secondaryText: String, desc: String, percent: F
                     text = desc,
                     fontSize = 10.sp,
                     color = Color(0xFF333333),
-                    modifier = Modifier
-                        .weight(7f, false)
-                        .padding(horizontal = 8.dp)
+                    modifier =
+                        Modifier
+                            .weight(7f, false)
+                            .padding(horizontal = 8.dp),
                 )
             }
         }
         OutlinedButton(
             onClick = {
             },
-            modifier = Modifier
-                .weight(2.5f),
-            border = if (percent >= 1f) ButtonDefaults.outlinedBorder else BorderStroke(
-                1.dp, Color(0xFFFF5900)
-            ),
+            modifier =
+                Modifier
+                    .weight(2.5f),
+            border =
+                if (percent >= 1f) {
+                    ButtonDefaults.outlinedBorder
+                } else {
+                    BorderStroke(
+                        1.dp,
+                        Color(0xFFFF5900),
+                    )
+                },
             shape = CircleShape,
             colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFFF5900)),
-            enabled = (percent < 1f)
+            enabled = (percent < 1f),
         ) {
             Text(text = "去学习")
         }
     }
 }
-
-
-

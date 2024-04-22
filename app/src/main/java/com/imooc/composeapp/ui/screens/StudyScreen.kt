@@ -1,6 +1,5 @@
 package com.imooc.composeapp.ui.screens
 
-
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -34,6 +33,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.placeholder.placeholder
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.imooc.composeapp.extension.onBottomReached
 import com.imooc.composeapp.ui.components.ArticleItem
 import com.imooc.composeapp.ui.components.NotificationContent
 import com.imooc.composeapp.ui.components.SwiperContent
@@ -42,10 +45,6 @@ import com.imooc.composeapp.ui.components.VideoItem
 import com.imooc.composeapp.viewmodel.ArticleViewModel
 import com.imooc.composeapp.viewmodel.MainViewModel
 import com.imooc.composeapp.viewmodel.VideoViewModel
-import com.google.accompanist.placeholder.placeholder
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
-import com.imooc.composeapp.extension.OnBottomReached
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -56,17 +55,17 @@ fun StudyScreen(
     videoViewModel: VideoViewModel = viewModel(),
     onNavigateToArticle: () -> Unit = {},
     onNavigateToVideo: () -> Unit = {},
-    onNavigateToStudyHistory: () -> Unit = {}
+    onNavigateToStudyHistory: () -> Unit = {},
 ) {
-
     val coroutinScope = rememberCoroutineScope()
-
 
     val lazyListState = rememberLazyListState()
 
-
-    lazyListState.OnBottomReached {
+    lazyListState.onBottomReached(buffer = 3) {
         Log.i("====", "StudyScreen: OnBottomReached")
+        coroutinScope.launch {
+            articleViewModel.loadMore()
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -76,28 +75,29 @@ fun StudyScreen(
         articleViewModel.fetchArticleList()
     }
 
-    Column() {
+    Column {
         TopAppBar(modifier = Modifier.padding(horizontal = 8.dp)) {
             // 搜索按钮
             Surface(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(16.dp))
-                    .weight(1f),
-                color = Color(0x33ffffff)
+                modifier =
+                    Modifier
+                        .clip(RoundedCornerShape(16.dp))
+                        .weight(1f),
+                color = Color(0x33ffffff),
             ) {
                 Row(modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)) {
                     Icon(
                         imageVector = Icons.Filled.Search,
                         contentDescription = null,
                         tint = Color.White,
-                        modifier = Modifier.size(14.dp)
+                        modifier = Modifier.size(14.dp),
                     )
                     Text(
                         "搜索感兴趣的资讯和课程",
                         color = Color.White,
                         fontSize = 12.sp,
                         maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        overflow = TextOverflow.Ellipsis,
                     )
                 }
             }
@@ -107,16 +107,18 @@ fun StudyScreen(
                 text = "学习\n进度",
                 fontSize = 10.sp,
                 color = Color.White,
-                modifier = Modifier.clickable {
-                    onNavigateToStudyHistory()
-                })
+                modifier =
+                    Modifier.clickable {
+                        onNavigateToStudyHistory()
+                    },
+            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(text = "26%", fontSize = 12.sp, color = Color.White)
             Spacer(modifier = Modifier.width(8.dp))
             Icon(
                 imageVector = Icons.Default.Notifications,
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
             )
         }
         // 分类标签
@@ -132,14 +134,15 @@ fun StudyScreen(
                         vm.updateCategoryIndex(index)
                     },
                     selectedContentColor = Color(0xFF149EE7),
-                    unselectedContentColor = Color(0xFF666666)
+                    unselectedContentColor = Color(0xFF666666),
                 ) {
                     Text(
                         text = category.title,
-                        modifier = Modifier
-                            .padding(vertical = 8.dp)
-                            .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
-                        fontSize = 14.sp
+                        modifier =
+                            Modifier
+                                .padding(vertical = 8.dp)
+                                .placeholder(visible = !vm.categoryLoaded, color = Color.LightGray),
+                        fontSize = 14.sp,
                     )
                 }
             }
@@ -150,13 +153,13 @@ fun StudyScreen(
             backgroundColor = Color.Transparent,
             contentColor = Color(0xFF149EE7),
             indicator = {
-
             },
-            divider = {}
+            divider = {},
         ) {
             vm.types.forEachIndexed { index, dataType ->
                 LeadingIconTab(
-                    selected = vm.currentTypeIndex == index, onClick = {
+                    selected = vm.currentTypeIndex == index,
+                    onClick = {
                         vm.updateTypeIndex(index)
                     },
                     selectedContentColor = Color(0xFF149EE7),
@@ -168,9 +171,9 @@ fun StudyScreen(
                         Text(
                             text = dataType.title,
                             modifier = Modifier.padding(vertical = 8.dp),
-                            fontSize = 16.sp
+                            fontSize = 16.sp,
                         )
-                    }
+                    },
                 )
             }
         }
@@ -181,7 +184,8 @@ fun StudyScreen(
                 coroutinScope.launch {
                     articleViewModel.refresh()
                 }
-            }) {
+            },
+        ) {
             LazyColumn(state = lazyListState) {
                 item {
                     // 轮播图
@@ -198,25 +202,24 @@ fun StudyScreen(
                         ArticleItem(
                             article,
                             articleViewModel.listLoader,
-                            modifier = Modifier.clickable { onNavigateToArticle.invoke() })
+                            modifier = Modifier.clickable { onNavigateToArticle.invoke() },
+                        )
                     }
                 } else {
                     // 视频列表
                     items(videoViewModel.list) { videoEntity ->
-                        VideoItem(modifier = Modifier.clickable {
-                            onNavigateToVideo()
-                        }, videoEntity)
+                        VideoItem(
+                            modifier =
+                                Modifier.clickable {
+                                    onNavigateToVideo()
+                                },
+                            videoEntity,
+                        )
                     }
                 }
-
-
             }
-
         }
-
-
     }
-
 }
 
 @Preview
@@ -224,4 +227,3 @@ fun StudyScreen(
 fun StudyScreenPreview() {
     StudyScreen()
 }
-

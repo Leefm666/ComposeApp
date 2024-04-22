@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
-
 class TaskViewModel() : ViewModel() {
     var taskDate by mutableStateOf("学习周期:2022.01.01-2022.12.31")
         private set
@@ -20,7 +19,6 @@ class TaskViewModel() : ViewModel() {
     var pointOfYearPercent by mutableStateOf(0f)
         private set
 
-
     /**
      * 更新学年积分进度
      */
@@ -31,7 +29,6 @@ class TaskViewModel() : ViewModel() {
     // 一周积分情况
     var pointOfWeek by mutableStateOf(listOf(0.0, 2.0, 6.0, 9.5, 10.0, 15.0, 5.0))
         private set
-
 
     val weeks = listOf("02.05", "02.06", "02.07", "02.08", "02.09", "02.10", "今日")
 
@@ -59,6 +56,5 @@ class TaskViewModel() : ViewModel() {
                 "今日获取${todayPoint}积分,已完成任务"
             }
         }
-
     }
 }

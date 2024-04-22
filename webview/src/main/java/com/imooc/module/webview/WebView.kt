@@ -1,6 +1,5 @@
 package com.imooc.module.webview
 
-
 import android.graphics.Bitmap
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -12,7 +11,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-
 import androidx.compose.ui.viewinterop.AndroidView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +21,6 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun WebView(state: WebViewState) {
-
     var webView by remember {
         mutableStateOf<WebView?>(null)
     }
@@ -37,19 +34,28 @@ fun WebView(state: WebViewState) {
     }
     AndroidView(factory = { context ->
         WebView(context).apply {
-            webChromeClient = object : WebChromeClient() {
-                override fun onReceivedTitle(view: WebView?, title: String?) {
-                    super.onReceivedTitle(view, title)
-                    state.pageTitle = title
+            webChromeClient =
+                object : WebChromeClient() {
+                    override fun onReceivedTitle(
+                        view: WebView?,
+                        title: String?,
+                    ) {
+                        super.onReceivedTitle(view, title)
+                        state.pageTitle = title
+                    }
                 }
-            }
 
-            webViewClient = object : WebViewClient() {
-                override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    super.onPageStarted(view, url, favicon)
-                    state.pageTitle = null
+            webViewClient =
+                object : WebViewClient() {
+                    override fun onPageStarted(
+                        view: WebView?,
+                        url: String?,
+                        favicon: Bitmap?,
+                    ) {
+                        super.onPageStarted(view, url, favicon)
+                        state.pageTitle = null
+                    }
                 }
-            }
             with(settings) {
                 javaScriptEnabled = true
             }
@@ -70,17 +76,13 @@ fun WebView(state: WebViewState) {
                 view.loadDataWithBaseURL(content.baseUrl, content.data, null, "utf-8", null)
             }
         }
-
-
     }
-
 }
 
 sealed class WebContent() {
     data class Url(val url: String) : WebContent()
+
     data class Data(val data: String, val baseUrl: String? = null) : WebContent()
-
-
 }
 
 class WebViewState(private val coroutinScope: CoroutineScope, webContent: WebContent) {
@@ -93,10 +95,8 @@ class WebViewState(private val coroutinScope: CoroutineScope, webContent: WebCon
 
     // 事件类型
     private enum class EventType {
-        EVALUATE_JAVASCRIPT // 执行js方法
-
+        EVALUATE_JAVASCRIPT, // 执行js方法
     }
-
 
     // 共享流的数据类型
     private class Event(val type: EventType, val args: String, val callback: ((String) -> Unit)?)
@@ -105,40 +105,40 @@ class WebViewState(private val coroutinScope: CoroutineScope, webContent: WebCon
     private val events: MutableSharedFlow<Event> = MutableSharedFlow()
 
     // 异步回调
-    internal suspend fun WebView.handleEvents(): Unit = withContext(Dispatchers.Main) {
-        events.collect { event ->
-            when (event.type) {
-                EventType.EVALUATE_JAVASCRIPT -> evaluateJavascript(event.args, event.callback)
+    internal suspend fun WebView.handleEvents(): Unit =
+        withContext(Dispatchers.Main) {
+            events.collect { event ->
+                when (event.type) {
+                    EventType.EVALUATE_JAVASCRIPT -> evaluateJavascript(event.args, event.callback)
+                }
             }
         }
-    }
 
     // 执行js方法
-    fun evaluateJavascript(script: String, resultCallback: ((String) -> Unit)? = {}) {
+    fun evaluateJavascript(
+        script: String,
+        resultCallback: ((String) -> Unit)? = {},
+    ) {
         val event = Event(EventType.EVALUATE_JAVASCRIPT, script, resultCallback)
         coroutinScope.launch {
             events.emit(event) // 推送流
         }
-
     }
-
 }
 
 @Composable
-fun rememberWebViewState(coroutinScope: CoroutineScope = rememberCoroutineScope(), url: String) =
-    remember(key1 = url) {
-        WebViewState(coroutinScope, WebContent.Url(url))
-    }
+fun rememberWebViewState(
+    coroutinScope: CoroutineScope = rememberCoroutineScope(),
+    url: String,
+) = remember(key1 = url) {
+    WebViewState(coroutinScope, WebContent.Url(url))
+}
 
 @Composable
 fun rememberWebViewState(
     coroutinScope: CoroutineScope = rememberCoroutineScope(),
     data: String,
-    baseUrl: String? = null
-) =
-    remember(key1 = data, key2 = baseUrl) {
-        WebViewState(coroutinScope, WebContent.Data(data, baseUrl))
-    }
-
-
-
+    baseUrl: String? = null,
+) = remember(key1 = data, key2 = baseUrl) {
+    WebViewState(coroutinScope, WebContent.Data(data, baseUrl))
+}
