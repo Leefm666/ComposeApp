@@ -19,12 +19,16 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
+import com.google.accompanist.placeholder.PlaceholderHighlight
+import com.google.accompanist.placeholder.material.placeholder
+import com.google.accompanist.placeholder.material.shimmer
 import com.imooc.composeapp.model.entity.VideoEntity
 
 @Composable
 fun VideoItem(
     modifier: Modifier = Modifier,
     videoEntity: VideoEntity,
+    loaded: Boolean,
 ) {
     val constraintSet =
         ConstraintSet {
@@ -73,7 +77,11 @@ fun VideoItem(
                 Modifier
                     .layoutId("cover")
                     .aspectRatio(16 / 9f)
-                    .clip(RoundedCornerShape(8.dp)),
+                    .clip(RoundedCornerShape(8.dp))
+                    .placeholder(
+                        visible = !loaded,
+                        highlight = PlaceholderHighlight.shimmer(),
+                    ),
         )
 
         Text(

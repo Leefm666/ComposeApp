@@ -64,7 +64,11 @@ fun StudyScreen(
     lazyListState.onBottomReached(buffer = 3) {
         Log.i("====", "StudyScreen: OnBottomReached")
         coroutinScope.launch {
-            articleViewModel.loadMore()
+            if (vm.showArticleList) {
+                articleViewModel.loadMore()
+            } else {
+                videoViewModel.loadMore()
+            }
         }
     }
 
@@ -73,6 +77,8 @@ fun StudyScreen(
         vm.categoryData()
         // 获取文章列表
         articleViewModel.fetchArticleList()
+        // 获取视频列表数据
+        videoViewModel.fetchList()
     }
 
     Column {
@@ -179,10 +185,17 @@ fun StudyScreen(
         }
 
         SwipeRefresh(
-            state = rememberSwipeRefreshState(isRefreshing = articleViewModel.refreshing),
+            state =
+                rememberSwipeRefreshState(
+                    isRefreshing = if (vm.showArticleList) articleViewModel.refreshing else videoViewModel.refreshing,
+                ),
             onRefresh = {
                 coroutinScope.launch {
-                    articleViewModel.refresh()
+                    if (vm.showArticleList) {
+                        articleViewModel.refresh()
+                    } else {
+                        videoViewModel.refreshing
+                    }
                 }
             },
         ) {
@@ -214,6 +227,7 @@ fun StudyScreen(
                                     onNavigateToVideo()
                                 },
                             videoEntity,
+                            videoViewModel.listLoaded,
                         )
                     }
                 }

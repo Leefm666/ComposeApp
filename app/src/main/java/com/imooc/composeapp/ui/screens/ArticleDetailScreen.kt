@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.NavigateBefore
 import androidx.compose.material.icons.filled.TextFields
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,6 +39,7 @@ import com.imooc.composeapp.viewmodel.ArticleViewModel
 import com.imooc.module.webview.rememberWebViewState
 import kotlinx.coroutines.launch
 
+@Suppress("ktlint:standard:function-naming")
 @OptIn(ExperimentalMaterialApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -45,8 +47,11 @@ fun ArticleDetailScreen(
     articleViewModel: ArticleViewModel = viewModel(),
     onBack: () -> Unit,
 ) {
-    val webViewState =
-        rememberWebViewState(data = articleViewModel.content)
+    LaunchedEffect(Unit) {
+        articleViewModel.fetchInfo()
+    }
+
+    val webViewState = rememberWebViewState(data = articleViewModel.content)
 
     var fontScale by remember {
         mutableStateOf(1.0f)

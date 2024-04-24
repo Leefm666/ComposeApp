@@ -166,11 +166,26 @@ class ArticleViewModel : ViewModel() {
         </body>
         </html>
         """.trimIndent()
+    private var articleEntity: ArticleEntity? = null
 
-    var content =
+    var content by mutableStateOf(
         """
         $htmlHeader
-        <div><h1>Header</h1></div>
+        ${articleEntity?.content ?: ""}
         $htmlFooter
-        """.trimIndent()
+        """.trimIndent(),
+    )
+
+    suspend fun fetchInfo() {
+        val res = articleService.info("")
+        if (res.code == 0 && res.data != null) {
+            articleEntity = res.data
+            content =
+                """
+                $htmlHeader
+                ${articleEntity?.content ?: ""}
+                $htmlFooter
+                """.trimIndent()
+        }
+    }
 }

@@ -5,9 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.imooc.composeapp.model.entity.VideoEntity
+import com.imooc.composeapp.model.service.VideoService
 
 class VideoViewModel : ViewModel() {
-    var list =
+    private val videoService = VideoService.instance()
+
+    var list by mutableStateOf(
         listOf(
             VideoEntity(
                 title = "当下国内仍处于AI产业趋势的早期，也就是硬件阶段。从业绩角度考虑，硬件设施作为“卖铲人”，订单增长确定性更大。",
@@ -75,8 +78,48 @@ class VideoViewModel : ViewModel() {
                 duration = "00:02:00",
                 imageUrl = "https://scpic.chinaz.net/files/default/imgs/2024-03-22/ab89240f49d09119.jpg",
             ),
-        )
+        ),
+    )
         private set
+
+    private val pageSize = 10
+    private var pageOffset = 1
+
+    var refreshing by mutableStateOf(false)
+        private set
+
+    var listLoaded by mutableStateOf(false)
+        private set
+
+    suspend fun fetchList() {
+        val res = videoService.list(pageOffset, pageSize)
+        if (res.code == 0 && res.data != null) {
+            val tmpList = mutableListOf<VideoEntity>()
+            if (pageOffset != 1) {
+                tmpList.addAll(list)
+            }
+            tmpList.addAll(res.data)
+            hasMore = res.data.size == pageSize
+            list = tmpList
+            refreshing = false
+            listLoaded = true
+        }
+    }
+
+    suspend fun refresh() {
+        pageOffset = 1
+        refreshing = true
+        fetchList()
+    }
+
+    private var hasMore = false
+
+    suspend fun loadMore() {
+        if (hasMore) {
+        }
+        pageOffset++
+        refresh()
+    }
 
     private var videoTitle by mutableStateOf("视频标题视频标题视频标题视频标题")
 
