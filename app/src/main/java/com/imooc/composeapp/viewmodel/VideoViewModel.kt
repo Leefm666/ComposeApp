@@ -147,7 +147,6 @@ class VideoViewModel : ViewModel() {
         """
         $htmlHeader
         <h5 style="color:#333333;font-size:32px;">$videoTitle</h5>
-        <div><h1>Header</h1></div>
         $htmlFooter
         """.trimIndent()
 
@@ -158,4 +157,27 @@ class VideoViewModel : ViewModel() {
 
     var coverUrl by mutableStateOf("https://media.w3.org/2010/05/sintel/trailer.mp4")
         private set
+
+    var infoLoaded by mutableStateOf(
+        false,
+    )
+        private set
+
+    suspend fun fetchInfo() {
+        val res = videoService.info("")
+        if (res.code == 0 && res.data != null) {
+            val videoEntity = res.data
+            videoTitle = videoEntity.title
+            coverUrl = videoEntity.imageUrl
+            videoUrl = videoEntity.video ?: ""
+            videoDesc =
+                """
+                $htmlHeader
+                <h5 style="color:#333333;font-size:32px;">$videoTitle</h5>
+                ${videoEntity.desc}
+                $htmlFooter
+                """.trimIndent()
+        }
+        infoLoaded = true
+    }
 }

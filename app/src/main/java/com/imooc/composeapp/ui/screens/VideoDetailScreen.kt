@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -22,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalConfiguration
@@ -43,15 +45,12 @@ fun VideoDetailScreen(
     videoViewModel: VideoViewModel = viewModel(),
     onBack: () -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        videoViewModel.fetchInfo()
+    }
     val systemUiController = rememberSystemUiController()
 
     val webViewState = rememberWebViewState(data = videoViewModel.videoDesc)
-
-    val vodController =
-        rememberVodController(
-            videoUrl = videoViewModel.videoUrl,
-            coverUrl = videoViewModel.coverUrl,
-        )
 
     val configuration = LocalConfiguration.current
 
@@ -65,27 +64,6 @@ fun VideoDetailScreen(
         mutableStateOf(
             Modifier.aspectRatio(16 / 9f),
         )
-    }
-
-    // todo 横屏后，点击屏幕状态栏即显示出来，而且不会再隐藏，如何处理这个问题
-    LaunchedEffect(configuration.orientation) {
-        // 横屏后恢复播放
-        vodController.restore()
-        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            videoBoxModifier =
-                Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(16 / 9f)
-            systemUiController.isSystemBarsVisible = true
-            scaffoldModifier =
-                Modifier
-                    .background(Blue700)
-                    .statusBarsPadding()
-        } else {
-            videoBoxModifier = Modifier.fillMaxSize()
-            systemUiController.isSystemBarsVisible = false
-            scaffoldModifier = Modifier
-        }
     }
 
     Scaffold(
@@ -111,17 +89,48 @@ fun VideoDetailScreen(
         },
         modifier = scaffoldModifier,
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            // 视频区域
-            Box(modifier = videoBoxModifier) {
-                VideoPlayer(vodController = vodController)
-            }
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            if (!videoViewModel.infoLoaded) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    val vodController =
+                        rememberVodController(
+                            videoUrl = videoViewModel.videoUrl,
+                            coverUrl = videoViewModel.coverUrl,
+                        )
+                    // todo 横屏后，点击屏幕状态栏即显示出来，而且不会再隐藏，如何处理这个问题
+                    LaunchedEffect(configuration.orientation) {
+                        // 横屏后恢复播放
+                        vodController.restore()
+                        if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            videoBoxModifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(16 / 9f)
+                            systemUiController.isSystemBarsVisible = true
+                            scaffoldModifier =
+                                Modifier
+                                    .background(Blue700)
+                                    .statusBarsPadding()
+                        } else {
+                            videoBoxModifier = Modifier.fillMaxSize()
+                            systemUiController.isSystemBarsVisible = false
+                            scaffoldModifier = Modifier
+                        }
+                    }
+                    // 视频区域
+                    Box(modifier = videoBoxModifier) {
+                        VideoPlayer(vodController = vodController)
+                    }
 
-            // 想让标题一起滚动，有两个方案
-            // 方案一：把标题 html文本中去
-            // 方案二：计算视频简介在webView中的高度，然后动态设置webView的高度
-            // 简介
-            WebView(state = webViewState)
+                    // 想让标题一起滚动，有两个方案
+                    // 方案一：把标题 html文本中去
+                    // 方案二：计算视频简介在webView中的高度，然后动态设置webView的高度
+                    // 简介
+                    WebView(state = webViewState)
+                }
+            } else {
+                CircularProgressIndicator()
+            }
         }
     }
 }

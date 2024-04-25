@@ -6,8 +6,11 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.imooc.composeapp.model.entity.ArticleEntity
 import com.imooc.composeapp.model.service.ArticleService
+import kotlinx.coroutines.delay
 
 class ArticleViewModel : ViewModel() {
+    var infoLoaded by mutableStateOf(false)
+        private set
     private val articleService = ArticleService.instance()
 
     val pageSize = 10
@@ -179,6 +182,7 @@ class ArticleViewModel : ViewModel() {
     suspend fun fetchInfo() {
         val res = articleService.info("")
         if (res.code == 0 && res.data != null) {
+            delay(1000)
             articleEntity = res.data
             content =
                 """
@@ -186,6 +190,7 @@ class ArticleViewModel : ViewModel() {
                 ${articleEntity?.content ?: ""}
                 $htmlFooter
                 """.trimIndent()
+            infoLoaded = true
         }
     }
 }
