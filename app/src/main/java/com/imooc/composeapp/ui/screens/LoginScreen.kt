@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
@@ -26,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.imooc.composeapp.R
 import com.imooc.composeapp.compositionLocal.LocalUserViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginScreen(onClose: () -> Unit) {
@@ -52,17 +57,11 @@ fun LoginScreen(onClose: () -> Unit) {
     // 屏幕高度
     var screenHeight: Float
 
-    var userName by remember {
-        mutableStateOf("")
-    }
-
-    var passWord by remember {
-        mutableStateOf("")
-    }
-
     var showPassword by remember {
         mutableStateOf(false)
     }
+
+    val coroutineScope = rememberCoroutineScope()
 
     /* with(LocalDensity.current) {
          screenWidth = LocalConfiguration.current.screenWidthDp.dp.toPx()
@@ -127,8 +126,8 @@ fun LoginScreen(onClose: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 TextField(
-                    value = userName,
-                    onValueChange = { userName = it },
+                    value = userViewModel.userName,
+                    onValueChange = { userViewModel.userName = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -152,8 +151,8 @@ fun LoginScreen(onClose: () -> Unit) {
                 )
 
                 TextField(
-                    value = passWord,
-                    onValueChange = { passWord = it },
+                    value = userViewModel.passWord,
+                    onValueChange = { userViewModel.passWord = it },
                     singleLine = true,
                     leadingIcon = {
                         Icon(
@@ -195,15 +194,25 @@ fun LoginScreen(onClose: () -> Unit) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 TextButton(onClick = {
-                    userViewModel.login(onClose = onClose)
-                }) {
-                    Text(text = "登陆", color = Color.White)
+                    coroutineScope.launch {
+                        userViewModel.login(onClose = onClose)
+                    }
+                }, enabled = userViewModel.loading) {
+                    Row {
+                        Text(text = "登陆", color = Color.White)
+                        if (userViewModel.loading) {
+                            CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                        }
+                    }
                 }
             }
 
             TextButton(onClick = {}) {
                 Text(text = "还没有账号？点击立即注册", color = Color.LightGray, fontSize = 14.sp)
             }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = userViewModel.error, color = Color.Red, fontSize = 13.sp)
         }
     }
 }
